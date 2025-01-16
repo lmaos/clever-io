@@ -7,6 +7,7 @@ import lombok.*;
 import org.clever.core.monitor.Session;
 import org.clever.core.protocol.ClientProtocol;
 import org.clever.core.protocol.ProtocolFactory;
+import org.clever.master.context.MasterContext;
 
 import java.util.UUID;
 
@@ -26,7 +27,8 @@ public class MasterSession implements Session {
      */
     @Getter
     private volatile long lastAccessTime = System.currentTimeMillis();
-
+    @Getter
+    private MasterContext masterContext;
     @Getter
     private ChannelHandlerContext ctx;
 
@@ -47,8 +49,9 @@ public class MasterSession implements Session {
 
 
 
-    public MasterSession(@NonNull ChannelHandlerContext ctx) {
+    public MasterSession(@NonNull ChannelHandlerContext ctx, MasterContext masterContext) {
         this.ctx = ctx;
+        this.masterContext = masterContext;
         addCloseListener(() -> {
             close = true;
         });

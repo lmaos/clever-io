@@ -12,5 +12,5 @@ public class WorkerProxyConfig {
      * worker adapter class : 本地适配器, 和远程适配器.
      * 用于处理 与worker 的业务的部分.
      */
-    private String workerAdapterClass;
+    private String workerScheduleClass;
 }

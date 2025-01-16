@@ -8,9 +8,16 @@ import org.clever.core.errors.IllegalDataFormatException;
  */
 public interface Response extends Protocol, ClientProtocol {
 
-
     default String getStatus() {
         return getHeader().getStatus();
+    }
+
+
+    public static interface WriteResponse extends Response {
+        void setId(long id);
+        void setStatus(String status);
+        void setBody(CleverBody body);
+        void setHeader(CleverHeader header);
     }
 
     public static class ReadResponse extends AbstractProtocol implements Response {
@@ -20,10 +27,17 @@ public interface Response extends Protocol, ClientProtocol {
         }
 
     }
-    public static class BaseResponse extends AbstractProtocol implements Response {
+
+    /**
+     * 基础应答
+     */
+    public static class BaseResponse extends AbstractProtocol implements WriteResponse {
         private String status = "ok";
         public BaseResponse(long id) {
             setId(id);
+        }
+        public BaseResponse() {
+            setId(-1);
         }
 
         @Override
@@ -37,6 +51,11 @@ public interface Response extends Protocol, ClientProtocol {
             if (header.getStatus() == null || header.getStatus().isEmpty()) {
                 header.setStatus(status);
             }
+        }
+
+        @Override
+        public void setId(long id) {
+            super.setId(id);
         }
 
         public void setStatus(String status) {

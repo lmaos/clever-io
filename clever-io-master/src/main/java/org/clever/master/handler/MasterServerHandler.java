@@ -21,7 +21,7 @@ public class MasterServerHandler extends SimpleChannelInboundHandler<Request> {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        session = new MasterSession(ctx);
+        session = new MasterSession(ctx, masterContext);
         masterContext.getMasterSessionManager().addSession(session);
         System.out.println("打开会话: " +session.getSessionKey());
     }
