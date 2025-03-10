@@ -42,13 +42,22 @@ public class LocalWorkerRegister implements WorkerRegister {
         workerScheduleMap.put(prefix, workerSchedule);
     }
 
+    /**
+     * 配置  WorkerSchedule . 通过ProxyConfig 本地配置Worker的注册使用
+     *
+     * @param proxyConfigs
+     * @return
+     */
     public LocalWorkerRegister config(List<WorkerProxyConfig> proxyConfigs) {
         for (WorkerProxyConfig proxyConfig : proxyConfigs) {
             try {
-                Class<AbstractWorkerSchedule> workerAdapterClass = (Class<AbstractWorkerSchedule>) Class.forName(proxyConfig.getWorkerScheduleClass());
-                Constructor<AbstractWorkerSchedule> declaredConstructor = workerAdapterClass.getDeclaredConstructor(WorkerRegister.class, WorkerProxyConfig.class);
-                AbstractWorkerSchedule workerSchedule = declaredConstructor.newInstance(proxyConfig);
-                addWorkerSchedule(proxyConfig.getPrefix(), workerSchedule);
+                Class<?> workerScheduleClass = Class.forName(proxyConfig.getWorkerScheduleClass());
+                if (!AbstractWorkerSchedule.class.isAssignableFrom(workerScheduleClass)) {
+                    Constructor<AbstractWorkerSchedule> declaredConstructor = (Constructor<AbstractWorkerSchedule>) workerScheduleClass
+                            .getDeclaredConstructor(MasterContext.class, WorkerProxyConfig.class);
+                    AbstractWorkerSchedule workerSchedule = declaredConstructor.newInstance(masterContext, proxyConfig);
+                    addWorkerSchedule(proxyConfig.getPrefix(), workerSchedule);
+                }
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
                      InvocationTargetException | NoSuchMethodException e) {
                 throw new RuntimeException(e);

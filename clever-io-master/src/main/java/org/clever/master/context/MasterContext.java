@@ -19,6 +19,21 @@ public class MasterContext implements Context {
     private MasterSessionManager masterSessionManager; // session 管理
     private WorkerRegister workerRegister; // worker 注册
 
+    /**
+     * internal worker
+     * 说看: master 启动时, 会创建一个 internal worker, 用于处理内部请求
+     */
+//    private InternalWorkerStart internalWorker;
+    private WorkerScheduleContext internalWorkerContext;
+    public MasterContext() {
+
+        init();
+    }
+
+    private void init() {
+        this.internalWorkerContext = new WorkerScheduleContext();
+    }
+
     @Override
     public void destroy() {
 
@@ -28,5 +43,7 @@ public class MasterContext implements Context {
         if (workerRegister != null) {
             workerRegister.destroy();
         }
+
+        internalWorkerContext.destroy();;
     }
 }

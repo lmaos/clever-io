@@ -1,7 +1,10 @@
 package org.clever.core.protocol;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.clever.core.errors.IllegalDataFormatException;
+
+import java.util.Map;
 
 /**
  * @author clever.cat
@@ -11,13 +14,49 @@ import org.clever.core.errors.IllegalDataFormatException;
  */
 public interface Request extends Protocol{
 
-    public static class ReadRequest extends AbstractProtocol implements Request {
+    default String getUri() {
+        return getHeader() == null ? "" : getHeader().getUri();
+    }
+
+    default void putAttr(String key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+    default Object getAttr(String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    public static abstract class AbstractRequest extends AbstractProtocol implements Request {
+        public AbstractRequest(Packet packet) throws IllegalDataFormatException {
+            super(packet);
+        }
+        public AbstractRequest() {
+        }
+
+        private Map<String, Object> attrs;
+
+        public void putAttr(String key, Object value) {
+            if (attrs == null) {
+                attrs = new java.util.HashMap<>();
+            }
+            attrs.put(key, value);
+        }
+        public Object getAttr(String key) {
+            if (attrs == null) {
+                return null;
+            }
+            return attrs.get(key);
+        }
+    }
+
+    public static class ReadRequest extends AbstractRequest implements Request {
 
         public ReadRequest(Packet packet) throws IllegalDataFormatException {
             super(packet);
         }
+
+
     }
-    public static class BaseRequest extends AbstractProtocol implements Request {
+    public static class BaseRequest extends AbstractRequest implements Request {
         public BaseRequest(){}
         public BaseRequest(long id){
             setId(id);
@@ -37,6 +76,7 @@ public interface Request extends Protocol{
         public void setHeader(CleverHeader header) {
             super.setHeader(header);
         }
+
 
     }
 

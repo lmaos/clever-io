@@ -8,6 +8,10 @@ import org.clever.core.errors.IllegalDataFormatException;
  */
 public interface Response extends Protocol, ClientProtocol {
 
+    public static String STATUS_OK = "OK";
+    public static String STATUS_NOT_FOUND = "NOT_FOUND";
+    // 无效的URI
+    public static String STATUS_INVALID_URI = "INVALID_URI";
     default String getStatus() {
         return getHeader().getStatus();
     }

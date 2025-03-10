@@ -50,7 +50,7 @@ public class MasterSessionManager implements Destroy {
         sessionMap.remove(session.getSessionKey());
         sessionMonitor.unmonitor(session.getSessionKey());
         roomSessionManager.leaveRoom(session.getSessionKey());
-        loginSessionManage.loginoutSession(session);
+        loginSessionManage.logoutSession(session);
     }
 
 

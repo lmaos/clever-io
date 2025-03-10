@@ -23,7 +23,7 @@ public class MasterLoginSessionManage {
     /**
      * 取消与UserId的绑定.
      */
-    public void loginoutSession(MasterSession session) {
+    public void logoutSession(MasterSession session) {
         if (session.getUserId() == null || session.getUserId().isEmpty()) {
             return;
         }

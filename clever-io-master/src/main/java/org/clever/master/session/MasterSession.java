@@ -93,4 +93,9 @@ public class MasterSession implements Session {
     public int hashCode() {
         return sessionKey.hashCode();
     }
+
+    // 替换 session.userId
+    public static void replaceUserId(MasterSession session, String userId) {
+        session.setUserId(userId);
+    }
 }

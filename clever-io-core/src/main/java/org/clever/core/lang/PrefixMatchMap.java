@@ -3,9 +3,20 @@ package org.clever.core.lang;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 前缀匹配.
+ * @param <Value> 值
+ */
 public class PrefixMatchMap<Value> {
     private EntryNode<Value> header = new EntryNode<>();
     private int length;
+
+    /**
+     * 添加一个键值对, 如果已经存在, 则替换.
+     * @param key
+     * @param value
+     * @return
+     */
     public Value put(String key, Value value) {
         EntryNode<Value> node = header;
         for (int i = 0; i < key.length(); i++) {
@@ -21,6 +32,11 @@ public class PrefixMatchMap<Value> {
         return oldValue;
     }
 
+    /**
+     * 通过这个键能匹配到的最长前缀, 获取值.
+     * @param text
+     * @return
+     */
     public Value get(String text) {
         // 最长前缀匹配
         EntryNode<Value> node = header;
